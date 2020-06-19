@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration >
+    <Appenders>
+        <!-- logger.info\logger.debug\logger.trace 输出 -->
+        <RollingRandomAccessFile name="infoFile" fileName="/data/demo-web/demo-web/logs/info.log"
+                                 filePattern="/data/demo-web/demo-web/logs/%d{yyyyMMdd}/info.log">
+            <Filters>
+                <ThresholdFilter level="warn" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="trace" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+            <PatternLayout charset="UTF-8"  >
+                <Pattern>[LOGID:%X{logId}] %d{HH:mm:ss.SSS} [%t] %-5level %l  - %msg%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+            </Policies>
+        </RollingRandomAccessFile>
+
+        <!-- logger.warn\logger.error 输出 -->
+        <RollingRandomAccessFile  name="errorFile" fileName="/data/demo-web/demo-web/logs/error.log"
+                                  filePattern="/data/demo-web/demo-web/logs/%d{yyyyMMdd}/error.log">
+            <Filters>
+                <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+            <PatternLayout charset="UTF-8"  >
+                <Pattern>[LOGID:%X{logId}] %d{HH:mm:ss.SSS} [%t] %-5level %l  - %msg%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+            </Policies>
+        </RollingRandomAccessFile>
+
+        <!-- accessLog 输出 -->
+        <RollingRandomAccessFile name="accessFile"
+                                 fileName="/data/demo-web/demo-web/logs/access.log"
+                                 filePattern="/data/demo-web/demo-web/logs/%d{yyyyMMdd}/access.log">
+            <PatternLayout charset="UTF-8"  >
+                <Pattern>[LOGID:%X{logId}] %d{HH:mm:ss.SSS} [%t] %-5level %l  - %msg%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+            </Policies>
+        </RollingRandomAccessFile>
+
+        <!-- dubbo日志 -->
+        <RollingRandomAccessFile name="dubboFile" fileName="/data/demo-web/demo-web/logs/dubbo.log"
+                                 filePattern="/data/demo-web/demo-web/logs/%d{yyyyMMdd}/dubbo.log">
+            <PatternLayout charset="UTF-8"  >
+                <Pattern>[LOGID:%X{logId}] %d{HH:mm:ss.SSS} [%t] %-5level %l  - %msg%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+            </Policies>
+        </RollingRandomAccessFile>
+
+        <!-- other -->
+        <RollingRandomAccessFile name="otherFile" fileName="/data/demo-web/demo-web/logs/other.log"
+                                 filePattern="/data/demo-web/demo-web/logs/%d{yyyyMMdd}/other.log">
+            <PatternLayout charset="UTF-8"  >
+                <Pattern>[LOGID:%X{logId}] %d{HH:mm:ss.SSS} [%t] %-5level %l  - %msg%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+            </Policies>
+        </RollingRandomAccessFile>
+
+        <!-- console -->
+        <Console name="console" target="SYSTEM_OUT">
+            <PatternLayout charset="UTF-8"   pattern="[LOGID:%X{logId}] %d{HH:mm:ss.SSS} [%t] %-5level %l  - %msg%n"/>
+        </Console>
+
+        <!-- all -->
+        <RollingRandomAccessFile name="All" fileName="/data/demo-web/demo-web/logs/all.log"
+                                 filePattern="/data/demo-web/demo-web/logs/%d{yyyyMMdd}/all.log">
+            <PatternLayout charset="UTF-8"  >
+                <Pattern>[LOGID:%X{logId}] %d{HH:mm:ss.SSS} [%t] %-5level %l  - %msg%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+            </Policies>
+        </RollingRandomAccessFile>
+
+
+
+    </Appenders>
+    <Loggers>
+
+        <!--&lt;!&ndash; com.intdisp INFO ERROR &ndash;&gt;-->
+        <Logger name="com.demo" level="INFO" additivity="false">
+            <appenderRef ref="errorFile" />
+            <appenderRef ref="infoFile" />
+            <appenderRef ref="All" />
+            <appenderRef ref="console" />
+        </Logger>
+
+        <Logger name="org.apache.ibatis" level="DEBUG" additivity="false">
+            <appenderRef ref="errorFile" />
+            <appenderRef ref="infoFile" />
+            <appenderRef ref="All" />
+            <appenderRef ref="console" />
+        </Logger>
+
+        <!-- spring \ mybatis \ velocity \ apache \ .. log -->
+        <Root level="INFO">
+            <appenderRef ref="otherFile" />
+            <appenderRef ref="All" />
+            <appenderRef ref="console" />
+        </Root>
+    </Loggers>
+</Configuration>
